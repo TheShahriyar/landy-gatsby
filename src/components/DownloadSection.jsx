@@ -1,6 +1,7 @@
 import React from 'react'
 import GoogleStore from "../img/store/google.png"
 import AppleStore from "../img/store/apple.png"
+import CountUp from 'react-countup';
 
 const DownloadSection = () => {
     return (
@@ -9,7 +10,7 @@ const DownloadSection = () => {
 				<div className="section-content">
 					<div className="download-area-content  text-center">
 						<div className="download-number  pb20">
-							<h2>7895</h2>
+							<h2><CountUp end={7895} duration={12.75} /></h2>
 						</div>
 						<div className="download-area-text  pb20">
 							<span>Join our thoursands of satisfied family and get your copy to use!</span>

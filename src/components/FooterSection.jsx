@@ -10,7 +10,7 @@ const FooterSection = () => {
 							<div className="row">
 								<div className="col-md-3 col-sm-6">
 									<div className="footer-content">
-										<span className="right deep-black">2017 Landy. All right reserved</span>
+										<span className="right deep-black">{new Date().getFullYear()} Landy. All right reserved</span>
 										<div className="footer-address mt20">
 											<span>457 Shantibag, Green Road 
 												Philadelphia, PH USA 17512

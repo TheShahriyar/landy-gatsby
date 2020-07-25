@@ -31,6 +31,13 @@ export default class ContactSection extends Component {
       .catch(error => alert(error))
 
     e.preventDefault()
+
+    this.setState({
+      name: "",
+      email: "",
+      subject: "",
+      textarea: "",
+    })
   }
   render() {
     const { name, email, subject, textarea } = this.state

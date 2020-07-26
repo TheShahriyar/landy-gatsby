@@ -8,36 +8,73 @@ const encode = data => {
     .join("&")
 }
 
+const initialState = {
+  name: "",
+  email: "",
+  subject: "",
+  textarea: "",
+  nameError: "",
+  emailError: "",
+  subjectError: "",
+  textareaError: "",
+}
+
 export default class ContactSection extends Component {
-  state = {
-    name: "",
-    email: "",
-    subject: "",
-    textarea: "",
-  }
+  state = initialState
 
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
     })
-  }
-  handleSubmit = e => {
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode({ "form-name": "Message", ...this.state }),
-    })
-      .then(() => alert("Success!"))
-      .catch(error => alert(error))
 
     e.preventDefault()
+  }
 
-    this.setState({
-      name: "",
-      email: "",
-      subject: "",
-      textarea: "",
-    })
+  validate = () => {
+    let nameError = ""
+    let emailError = ""
+    let subjectError = ""
+    let textareaError = ""
+    // let passwordError = "";
+
+    if (!this.state.name) {
+      nameError = "name cannot be blank"
+    }
+
+    if (!this.state.textarea) {
+      textareaError = "Message cannot be blank"
+    }
+    if (!this.state.subject) {
+      subjectError = "Message cannot be blank"
+    }
+
+    if (!this.state.email.includes("@")) {
+      emailError = "invalid email"
+    }
+
+    if (emailError || nameError || subjectError || textareaError) {
+      this.setState({ emailError, nameError, subjectError, textareaError })
+      return false
+    }
+
+    return true
+  }
+
+  handleSubmit = e => {
+    e.preventDefault()
+
+    const isValid = this.validate()
+    if (isValid) {
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ "form-name": "Message", ...this.state }),
+      })
+        .then(() => alert("Success!"))
+        .catch(error => alert(error))
+      // clear form
+      this.setState(initialState)
+    }
   }
   render() {
     const { name, email, subject, textarea } = this.state
@@ -61,7 +98,11 @@ export default class ContactSection extends Component {
                     <input type="hidden" name="form-name" value="contact" />
                     <div className="contact-info">
                       <input
-                        className="name  mr30"
+                        className={
+                          this.state.nameError.length > 0
+                            ? "name mr30 error"
+                            : "name mr30"
+                        }
                         name="name"
                         value={name}
                         onChange={this.handleChange}
@@ -71,7 +112,11 @@ export default class ContactSection extends Component {
                     </div>
                     <div className="contact-info">
                       <input
-                        className="email"
+                        className={
+                          this.state.emailError.length > 0
+                            ? "email error"
+                            : "email"
+                        }
                         name="email"
                         value={email}
                         onChange={this.handleChange}
@@ -81,7 +126,11 @@ export default class ContactSection extends Component {
                     </div>
                     <div className="contact-info-1">
                       <input
-                        className="name"
+                        className={
+                          this.state.subjectError.length > 0
+                            ? "name error"
+                            : "name"
+                        }
                         name="subject"
                         value={subject}
                         onChange={this.handleChange}
@@ -92,6 +141,9 @@ export default class ContactSection extends Component {
                     <div className="contact-info">
                       <textarea
                         id="message"
+                        className={
+                          this.state.textareaError.length > 0 ? "error" : null
+                        }
                         name="textarea"
                         value={textarea}
                         onChange={this.handleChange}
